@@ -11,3 +11,7 @@ If apache (choose preferred subscription file):
 java -cp "target/partition-assignors-demo-1.0-SNAPSHOT.jar:target/dependency/*" org.ychernysh.DemoMain consumer.properties subscriptions/common1.txt
 If mapr (same):
 java -cp "target/partition-assignors-demo-1.0-SNAPSHOT.jar:$(mapr clientclasspath --kafka)" org.ychernysh.DemoMain consumer.properties subscriptions/common1.txt
+
+To run all 4 assignors on both common & different subscriptions, use org.ychernysh.DemoAll class with no arguments.
+
+NOTE: this demo currently doesn't showcase the Incremental Cooperative Rebalance yet, that is StickyAssignor and CooperativeStickyAssignor would look the same. To see the difference, add logging to onPartitionsRevoked and onPartitionsAssigned
