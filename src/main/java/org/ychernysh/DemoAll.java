@@ -1,23 +1,39 @@
 package org.ychernysh;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerPartitionAssignor;
+import org.apache.kafka.clients.consumer.CooperativeStickyAssignor;
+import org.apache.kafka.clients.consumer.RangeAssignor;
+import org.apache.kafka.clients.consumer.RoundRobinAssignor;
+import org.apache.kafka.clients.consumer.StickyAssignor;
+
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Properties;
 
 public class DemoAll {
-  public static void main(String[] args) {
-    run("configs/consumer_configs/consumer-range.properties", "configs/subscriptions/common-subscriptions1.txt", "results/range-common.txt");
-    run("configs/consumer_configs/consumer-round-robin.properties", "configs/subscriptions/common-subscriptions1.txt", "results/round-robin-common.txt");
-    run("configs/consumer_configs/consumer-sticky.properties", "configs/subscriptions/common-subscriptions1.txt", "results/sticky-common.txt");
-    run("configs/consumer_configs/consumer-cooperative-sticky.properties", "configs/subscriptions/common-subscriptions1.txt", "results/cooperative-sticky-common.txt");
 
-    run("configs/consumer_configs/consumer-range.properties", "configs/subscriptions/different-subscriptions1.txt", "results/range-different.txt");
-    run("configs/consumer_configs/consumer-round-robin.properties", "configs/subscriptions/different-subscriptions1.txt", "results/round-robin-different.txt");
-    run("configs/consumer_configs/consumer-sticky.properties", "configs/subscriptions/different-subscriptions1.txt", "results/sticky-different.txt");
-    run("configs/consumer_configs/consumer-cooperative-sticky.properties", "configs/subscriptions/different-subscriptions1.txt", "results/cooperative-sticky-different.txt");
+  private static final Properties consumerConfig = new Properties();
+
+  public static void main(String[] args) throws IOException {
+    consumerConfig.load(new FileReader("consumer.properties"));
+
+    run(RangeAssignor.class, "subscriptions/common-subscriptions1.txt", "results/range-common.txt");
+    run(RoundRobinAssignor.class, "subscriptions/common-subscriptions1.txt", "results/round-robin-common.txt");
+    run(StickyAssignor.class, "subscriptions/common-subscriptions1.txt", "results/sticky-common.txt");
+    run(CooperativeStickyAssignor.class, "subscriptions/common-subscriptions1.txt", "results/cooperative-sticky-common.txt");
+
+    run(RangeAssignor.class, "subscriptions/different-subscriptions1.txt", "results/range-different.txt");
+    run(RoundRobinAssignor.class, "subscriptions/different-subscriptions1.txt", "results/round-robin-different.txt");
+    run(StickyAssignor.class, "subscriptions/different-subscriptions1.txt", "results/sticky-different.txt");
+    run(CooperativeStickyAssignor.class, "subscriptions/different-subscriptions1.txt", "results/cooperative-sticky-different.txt");
   }
-  private static void run(String consumerConfig, String subscriptions1, String outputFile) {
+  private static void run(Class<? extends ConsumerPartitionAssignor> assignorClass, String subscriptionsPath, String outputFile) {
     try {
-      new PartitionAssignorsDemo(new PrintStream(outputFile)).run(consumerConfig, subscriptions1);
+      consumerConfig.setProperty(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, assignorClass.getName());
+      new PartitionAssignorsDemo(new PrintStream(outputFile)).run(consumerConfig, subscriptionsPath);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
