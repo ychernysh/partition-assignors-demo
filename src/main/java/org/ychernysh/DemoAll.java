@@ -20,15 +20,15 @@ public class DemoAll {
   public static void main(String[] args) throws IOException {
     consumerConfig.load(new FileReader("consumer.properties"));
 
-    run(RangeAssignor.class, "subscriptions/common-subscriptions1.txt", "results/range-common.txt");
-    run(RoundRobinAssignor.class, "subscriptions/common-subscriptions1.txt", "results/round-robin-common.txt");
-    run(StickyAssignor.class, "subscriptions/common-subscriptions1.txt", "results/sticky-common.txt");
-    run(CooperativeStickyAssignor.class, "subscriptions/common-subscriptions1.txt", "results/cooperative-sticky-common.txt");
+    run(RangeAssignor.class, "subscriptions/common1.txt", "results/range-common.txt");
+    run(RoundRobinAssignor.class, "subscriptions/common1.txt", "results/round-robin-common.txt");
+    run(StickyAssignor.class, "subscriptions/common1.txt", "results/sticky-common.txt");
+    run(CooperativeStickyAssignor.class, "subscriptions/common1.txt", "results/cooperative-sticky-common.txt");
 
-    run(RangeAssignor.class, "subscriptions/different-subscriptions1.txt", "results/range-different.txt");
-    run(RoundRobinAssignor.class, "subscriptions/different-subscriptions1.txt", "results/round-robin-different.txt");
-    run(StickyAssignor.class, "subscriptions/different-subscriptions1.txt", "results/sticky-different.txt");
-    run(CooperativeStickyAssignor.class, "subscriptions/different-subscriptions1.txt", "results/cooperative-sticky-different.txt");
+    run(RangeAssignor.class, "subscriptions/different1.txt", "results/range-different.txt");
+    run(RoundRobinAssignor.class, "subscriptions/different1.txt", "results/round-robin-different.txt");
+    run(StickyAssignor.class, "subscriptions/different1.txt", "results/sticky-different.txt");
+    run(CooperativeStickyAssignor.class, "subscriptions/different1.txt", "results/cooperative-sticky-different.txt");
   }
   private static void run(Class<? extends ConsumerPartitionAssignor> assignorClass, String subscriptionsPath, String outputFile) {
     try {
