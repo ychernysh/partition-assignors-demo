@@ -41,7 +41,8 @@ public class PartitionAssignorsDemo {
 
     processRebalanceEvent("Initial", () -> subscriptions.forEach(group::addMember));
     processRebalanceEvent("C1 leaves", () -> group.removeMember(1));
-    processRebalanceEvent("C4 joins", () -> group.addMember(subscriptions.get(0)));
+    Set<String> c4Subscription = subscriptions.get(0);
+    processRebalanceEvent("C4 joins with subscription " + c4Subscription, () -> group.addMember(c4Subscription));
 
     group.close();
   }

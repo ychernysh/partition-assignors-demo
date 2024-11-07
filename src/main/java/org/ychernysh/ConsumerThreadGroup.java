@@ -47,7 +47,7 @@ public class ConsumerThreadGroup implements AutoCloseable {
 
   public boolean isRebalancing() {
     // TODO: find a better way to do it
-    return System.currentTimeMillis() - lastRebalanceEventMs < 5 * 1000;
+    return System.currentTimeMillis() - lastRebalanceEventMs < 15 * 1000;
   }
 
   @Override
